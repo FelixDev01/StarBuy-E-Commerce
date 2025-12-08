@@ -1,6 +1,7 @@
 package com.starbuy.ecommerce.services;
 
 import com.starbuy.ecommerce.dto.ProductDTO;
+import com.starbuy.ecommerce.dto.ProductRequestDTO;
 import com.starbuy.ecommerce.models.Product;
 import com.starbuy.ecommerce.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,18 @@ public class ProductService {
 
     public ProductService(ProductRepository repository) {
         this.repository = repository;
+    }
+
+    @Transactional
+    public ProductDTO createProduct(ProductRequestDTO dto){
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setImgUrl(dto.getImgUrl());
+        product = repository.save(product);
+
+        return new ProductDTO(product);
     }
 
     @Transactional(readOnly = true)
