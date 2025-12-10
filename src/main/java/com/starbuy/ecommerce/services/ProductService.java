@@ -4,6 +4,7 @@ import com.starbuy.ecommerce.dto.ProductDTO;
 import com.starbuy.ecommerce.dto.ProductRequestDTO;
 import com.starbuy.ecommerce.models.Product;
 import com.starbuy.ecommerce.repositories.ProductRepository;
+import com.starbuy.ecommerce.services.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,9 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById (Long id){
-        Optional<Product> result = repository.findById(id);
-        Product product = result.get();
-        ProductDTO dto = new ProductDTO(product);
-        return dto;
+        Product result = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Id Not Found"));
+        return new ProductDTO(result);
     }
 
     @Transactional(readOnly = true)
