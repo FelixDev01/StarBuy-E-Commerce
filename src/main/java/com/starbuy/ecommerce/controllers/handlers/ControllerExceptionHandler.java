@@ -1,6 +1,7 @@
 package com.starbuy.ecommerce.controllers.handlers;
 
 import com.starbuy.ecommerce.dto.CustomError;
+import com.starbuy.ecommerce.services.exceptions.DatabaseException;
 import com.starbuy.ecommerce.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,5 +20,13 @@ public class ControllerExceptionHandler {
         CustomError error = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<CustomError> databaseException(DatabaseException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.CONFLICT;
+        CustomError error = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(error);
+    }
+
 
 }
