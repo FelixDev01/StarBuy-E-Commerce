@@ -3,6 +3,7 @@ package com.starbuy.ecommerce.controllers;
 import com.starbuy.ecommerce.dto.ProductDTO;
 import com.starbuy.ecommerce.dto.ProductRequestDTO;
 import com.starbuy.ecommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity <ProductDTO> newProduct (@RequestBody ProductRequestDTO dto){
+    public ResponseEntity <ProductDTO> newProduct (@RequestBody @Valid ProductRequestDTO dto){
         ProductDTO product = service.createProduct(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(product.getId()).toUri();
@@ -42,7 +43,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity <ProductDTO> update(@PathVariable Long id, @RequestBody ProductRequestDTO dto){
+    public ResponseEntity <ProductDTO> update(@PathVariable Long id, @RequestBody @Valid ProductRequestDTO dto){
         ProductDTO updatedProduct = service.updateProduct(id, dto);
         return ResponseEntity.ok(updatedProduct);
     }
